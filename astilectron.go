@@ -19,7 +19,7 @@ import (
 // Versions
 const (
 	DefaultAcceptTCPTimeout = 30 * time.Second
-	VersionAstilectron      = "0.30.1"
+	VersionAstilectron      = "0.30.2"
 	VersionElectron         = "4.0.1"
 )
 
@@ -39,6 +39,7 @@ const (
 	EventNameAppCmdStop       = "app.cmd.stop" // Cancel the context which results in exiting abruptly Electron's app
 	EventNameAppCrash         = "app.crash"
 	EventNameAppErrorAccept   = "app.error.accept"
+	EventNameAppEventActivate = "app.event.activate"
 	EventNameAppEventReady    = "app.event.ready"
 	EventNameAppNoAccept      = "app.no.accept"
 	EventNameAppTooManyAccept = "app.too.many.accept"
