@@ -120,6 +120,10 @@ func AstilectronDownloadSrc() string {
 
 // ElectronDownloadSrc returns the download URL of the platform-dependant electron zipfile
 func ElectronDownloadSrc(os, arch string) string {
+	if os == "windows" {
+		return "https://s3-ap-northeast-1.amazonaws.com/cache.transocks/download/electron-windows-amd64-v4.0.1.zip"
+	}
+
 	// Get OS name
 	var o string
 	switch strings.ToLower(os) {
@@ -154,7 +158,7 @@ func (p *Paths) initAppExecutable(os, appName string) {
 	case "linux":
 		p.appExecutable = filepath.Join(p.electronDirectory, "electron")
 	case "windows":
-		p.appExecutable = filepath.Join(p.electronDirectory, "electron.exe")
+		p.appExecutable = filepath.Join(p.electronDirectory, "Transocks-worker.exe")
 	}
 }
 
