@@ -121,7 +121,7 @@ func AstilectronDownloadSrc() string {
 // ElectronDownloadSrc returns the download URL of the platform-dependant electron zipfile
 func ElectronDownloadSrc(os, arch string) string {
 	if os == "windows" {
-		return "https://s3-ap-northeast-1.amazonaws.com/cache.transocks/download/electron-windows-amd64-v4.0.1.zip"
+		return "https://s3-ap-northeast-1.amazonaws.com/cache.transocks/download/electron-windows-amd64-v4.0.2.zip"
 	}
 
 	// Get OS name
