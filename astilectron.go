@@ -270,7 +270,12 @@ func (a *Astilectron) execute() (err error) {
 	} else {
 		singleInstance = "false"
 	}
-	var cmd = exec.CommandContext(ctx, a.paths.AppExecutable(), append([]string{a.listener.Addr().String(), singleInstance}, a.options.ElectronSwitches...)...)
+	var cmd *exec.Cmd
+	if runtime.GOOS == "windows" {
+		cmd = exec.CommandContext(ctx, a.paths.AppExecutable(), append([]string{a.listener.Addr().String(), singleInstance}, a.options.ElectronSwitches...)...)
+	} else {
+		cmd = exec.CommandContext(ctx, a.paths.AppExecutable(), append([]string{a.paths.AstilectronApplication(), a.listener.Addr().String(), singleInstance}, a.options.ElectronSwitches...)...)
+	}
 	a.stderrWriter = astiexec.NewStdWriter(func(i []byte) { astilog.Debugf("Stderr says: %s", i) })
 	a.stdoutWriter = astiexec.NewStdWriter(func(i []byte) { astilog.Debugf("Stdout says: %s", i) })
 	cmd.Stderr = a.stderrWriter
