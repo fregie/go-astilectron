@@ -11,8 +11,8 @@ import (
 	"time"
 
 	"github.com/asticode/go-astilog"
-	"github.com/asticode/go-astitools/context"
-	"github.com/asticode/go-astitools/exec"
+	asticontext "github.com/asticode/go-astitools/context"
+	astiexec "github.com/asticode/go-astitools/exec"
 	"github.com/pkg/errors"
 )
 
@@ -39,6 +39,7 @@ const (
 	EventNameAppCmdStop       = "app.cmd.stop" // Cancel the context which results in exiting abruptly Electron's app
 	EventNameAppCrash         = "app.crash"
 	EventNameAppErrorAccept   = "app.error.accept"
+	EventNameAppEventActivate = "app.event.activate"
 	EventNameAppEventReady    = "app.event.ready"
 	EventNameAppNoAccept      = "app.no.accept"
 	EventNameAppTooManyAccept = "app.too.many.accept"
@@ -269,7 +270,12 @@ func (a *Astilectron) execute() (err error) {
 	} else {
 		singleInstance = "false"
 	}
-	var cmd = exec.CommandContext(ctx, a.paths.AppExecutable(), append([]string{a.paths.AstilectronApplication(), a.listener.Addr().String(), singleInstance}, a.options.ElectronSwitches...)...)
+	var cmd *exec.Cmd
+	if runtime.GOOS == "windows" {
+		cmd = exec.CommandContext(ctx, a.paths.AppExecutable(), append([]string{a.listener.Addr().String(), singleInstance}, a.options.ElectronSwitches...)...)
+	} else {
+		cmd = exec.CommandContext(ctx, a.paths.AppExecutable(), append([]string{a.paths.AstilectronApplication(), a.listener.Addr().String(), singleInstance}, a.options.ElectronSwitches...)...)
+	}
 	a.stderrWriter = astiexec.NewStdWriter(func(i []byte) { astilog.Debugf("Stderr says: %s", i) })
 	a.stdoutWriter = astiexec.NewStdWriter(func(i []byte) { astilog.Debugf("Stdout says: %s", i) })
 	cmd.Stderr = a.stderrWriter

@@ -5,8 +5,8 @@ import (
 	"sync"
 
 	"github.com/asticode/go-astilog"
-	"github.com/asticode/go-astitools/context"
-	"github.com/asticode/go-astitools/url"
+	asticontext "github.com/asticode/go-astitools/context"
+	astiurl "github.com/asticode/go-astitools/url"
 	"github.com/pkg/errors"
 )
 
