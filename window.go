@@ -5,8 +5,8 @@ import (
 	"sync"
 
 	"github.com/asticode/go-astilog"
-	"github.com/asticode/go-astitools/context"
-	"github.com/asticode/go-astitools/url"
+	asticontext "github.com/asticode/go-astitools/context"
+	astiurl "github.com/asticode/go-astitools/url"
 	"github.com/pkg/errors"
 )
 
@@ -28,7 +28,7 @@ const (
 	EventNameWindowCmdMinimize                 = "window.cmd.minimize"
 	EventNameWindowCmdMove                     = "window.cmd.move"
 	EventNameWindowCmdResize                   = "window.cmd.resize"
-	EventNameWindowCmdSetBounds                = "window.cmd.setbounds"
+	EventNameWindowCmdSetBounds                = "window.cmd.set.bounds"
 	EventNameWindowCmdRestore                  = "window.cmd.restore"
 	EventNameWindowCmdShow                     = "window.cmd.show"
 	EventNameWindowCmdUnmaximize               = "window.cmd.unmaximize"
