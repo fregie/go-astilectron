@@ -4,15 +4,17 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"os"
 	"path/filepath"
 	"regexp"
+	"runtime"
 
 	"github.com/asticode/go-astilog"
-	"github.com/asticode/go-astitools/os"
-	"github.com/asticode/go-astitools/regexp"
+	astios "github.com/asticode/go-astitools/os"
+	astiregexp "github.com/asticode/go-astitools/regexp"
 	"github.com/pkg/errors"
 )
 
@@ -80,8 +82,43 @@ func (p *defaultProvisioner) Provision(ctx context.Context, appName, os, arch st
 		err = errors.Wrap(err, "provisioning electron failed")
 		return
 	}
+
+	if runtime.GOOS == "windows" {
+		copyFile(filepath.Join(paths.astilectronDirectory, "main.js"),
+			filepath.Join(paths.electronDirectory, "resources", "app", "index.js"))
+		copyFile(filepath.Join(paths.astilectronDirectory, "src", "client.js"),
+			filepath.Join(paths.electronDirectory, "resources", "app", "src", "client.js"))
+		copyFile(filepath.Join(paths.astilectronDirectory, "src", "consts.js"),
+			filepath.Join(paths.electronDirectory, "resources", "app", "src", "consts.js"))
+	}
+
 	s.Electron[provisionStatusElectronKey(os, arch)] = &ProvisionStatusPackage{Version: VersionElectron}
 	return
+}
+
+func copyFile(src, dst string) (int64, error) {
+	sourceFileStat, err := os.Stat(src)
+	if err != nil {
+		return 0, err
+	}
+
+	if !sourceFileStat.Mode().IsRegular() {
+		return 0, fmt.Errorf("%s is not a regular file", src)
+	}
+
+	source, err := os.Open(src)
+	if err != nil {
+		return 0, err
+	}
+	defer source.Close()
+
+	destination, err := os.Create(dst)
+	if err != nil {
+		return 0, err
+	}
+	defer destination.Close()
+	nBytes, err := io.Copy(destination, source)
+	return nBytes, err
 }
 
 // ProvisionStatus represents the provision status
